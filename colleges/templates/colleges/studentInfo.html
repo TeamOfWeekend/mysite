@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block header %}
+	<h2><a href="{% url 'colleges:show_college' %}">{{ student.college_name }}</a>
+		<small>
+			>> <a href="{% url 'colleges:show_academy' %}">{{ student.academy_name }}</a>
+			>> <a href="{% url 'colleges:show_major' %}">{{ student.major_name }}</a>
+			>> <a href="{% url 'colleges:show_grade' %}">{{ student.grade_id }}年级</a>
+			>> <a href="{% url 'colleges:show_class' %}">{{ student.class_id }}年级</a>
+			>> {{ student.name }}
+		</small>
+	</h2>
+
+{% endblock header %}
+
+{% block content %}
+
+	<table border="1" class="table table-striped table-hover table-condensed">
+		<tr>
+			<th colspan="2">学生信息</th>
+		</tr>
+		<tr>
+			<td>学号</td>
+			<td>{{ student.id }}</td>
+		</tr>
+		<tr>
+			<td>姓名拼音</td>
+			<td>{{ student.name_pinyin }}</td>
+		</tr>
+		<tr>
+			<td>性别</td>
+			<td>{{ student.sex }}</td>
+		</tr>
+		<tr>
+			<td>年龄</td>
+			<td>{{ student.age }}</td>
+		</tr>
+		<tr>
+			<td>入学时间</td>
+			<td>{{ student.year_in_college }}</td>
+		</tr>
+		<tr>
+			<td>身高</td>
+			<td>{{ student.height }}</td>
+		</tr>
+		<tr>
+			<td>体重</td>
+			<td>{{ student.weight }}</td>
+		</tr>
+		<tr>
+			<td>身份证号</td>
+			<td>{{ student.id_number }}</td>
+		</tr>
+		<tr>
+			<td>爱好</td>
+			<td>{{ student.hobbies }}</td>
+		</tr>
+		<tr>
+			<td>胸围</td>
+			<td>{{ student.bust }}</td>
+		</tr>
+		<tr>
+			<td>腰围</td>
+			<td>{{ student.waist }}</td>
+		</tr>
+		<tr>
+			<td>臀围</td>
+			<td>{{ student.hips }}</td>
+		</tr>
+		<tr>
+			<td>婚姻状况</td>
+			<td>{{ student.married }}</td>
+		</tr>
+	</table>
+
+	<form action="{% url 'colleges:show_college' %}" method='post' class='form'>
+		{% csrf_token %}
+
+		<table>
+		</table>
+
+		<button name="submit" class="btn btn-primary">进入学院</button>
+
+	</form>
+	
+{% endblock content %}

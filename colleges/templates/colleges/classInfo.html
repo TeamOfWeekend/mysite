@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block header %}
+	<h2>
+		<a href="{% url 'colleges:show_college' %}">{{ classs.college_name }}</a>
+		<small>
+			>> <a href="{% url 'colleges:show_academy' %}">{{ classs.academy_name }}</a>
+			>> <a href="{% url 'colleges:show_major' %}">{{ classs.major_name }}</a>
+			>> <a href="{% url 'colleges:show_grade' %}">{{ classs.grade_id }}年级</a>
+			>> {{ classs.id }}班
+		</small>
+	</h2>
+{% endblock header %}
+
+{% block content %}
+
+	<table border="1" class="table table-striped table-hover table-condensed">
+		<tr>
+			<th colspan="2">班级信息</th>
+		</tr>
+		<tr>
+			<td>学生数量</td>
+			<td>{{ classs.students_num }}</td>
+		</tr>
+	</table>
+
+	<table border="1" class="table table-striped table-hover table-condensed">
+		<tr>
+			<th colspan="1">姓名</th>
+			<th colspan="1">学号</th>
+			<th colspan="1">性别</th>
+		</tr>
+		{% for student_info in classs.students_info %}
+			<tr>
+				<td><a href="{% url 'colleges:show_student' student_info.1 %}">{{ student_info.0 }}</a></td>
+				<td>{{ student_info.1 }}</td>
+				<td>{{ student_info.2 }}</td>
+			</tr>
+		{% empty %}
+		{% endfor %}
+
+	</table>
+	
+{% endblock content %}

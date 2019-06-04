@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block header %}
+	<h2>
+		<a href="{% url 'imagination:collegeInfo' %}">{{ grade.college_name }}</a>
+		<small>
+			>> <a href="{% url 'imagination:academyInfo' %}">{{ grade.academy_name }}</a>
+			>> <a href="{% url 'imagination:majorInfo' %}">{{ grade.major_name }}</a>
+			>> {{ grade.id }}年级
+		</small>
+	</h2>
+{% endblock header %}
+
+{% block content %}
+
+	<table border="1" class="table table-striped table-hover table-condensed">
+		<tr>
+			<th colspan="2">年级信息</th>
+		</tr>
+		<tr>
+			<td>班级数量</td>
+			<td>{{ grade.classes_num }}</td>
+		</tr>
+		<tr>
+			<td>学生数量</td>
+			<td>{{ grade.students_num }}</td>
+		</tr>
+	</table>
+
+	<form action="{% url 'colleges:show_class' %}" method='post' class='form'>
+		{% csrf_token %}
+
+		<table>
+			{{ grade_form.as_table }}
+		</table>
+
+		<button name="submit" class="btn btn-primary">进入班级</button>
+
+	</form>
+	
+{% endblock content %}

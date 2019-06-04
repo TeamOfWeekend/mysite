@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block header %}
+	<h2>学校入口</h2>
+{% endblock header %}
+
+{% block content %}
+
+	<form action="{% url 'college:show_college' %}" method='post' class='form'>
+		{% csrf_token %}
+		{{ college_entry_form.as_p }}
+
+		<button name="submit" class="btn btn-primary">进入学校</button>
+
+	</form>
+	
+{% endblock content %}

@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block header %}
+	<h2>
+		<a href="{% url 'imagination:collegeInfo' %}">{{ major.college_name }}</a>
+		<small>
+			>> <a href="{% url 'imagination:academyInfo' %}">{{ major.academy_name }}</a>
+			>> {{ major.name }}
+		</small>
+	</h2>
+{% endblock header %}
+
+{% block content %}
+
+	<table border="1" class="table table-striped table-hover table-condensed">
+		<tr>
+			<th colspan="2">专业信息</th>
+		</tr>
+		<tr>
+			<td>编号</td>
+			<td>{{ major.id }}</td>
+		</tr>
+		<tr>
+			<td>年级数量</td>
+			<td>{{ major.grades_num }}</td>
+		</tr>
+		<tr>
+			<td>教师数量</td>
+			<td>{{ major.teachers_num }}</td>
+		</tr>
+		<tr>
+			<td>学生数量</td>
+			<td>{{ major.students_num }}</td>
+		</tr>
+	</table>
+
+	<form action="{% url 'colleges:show_grade' %}" method='post' class='form'>
+		{% csrf_token %}
+
+		<table>
+			{{ major_form.as_table }}
+		</table>
+
+		<button name="submit" class="btn btn-primary">进入年级</button>
+
+	</form>
+	
+{% endblock content %}
