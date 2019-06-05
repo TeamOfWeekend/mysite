@@ -268,7 +268,7 @@ CELERYBEAT_SCHEDULE = {
 
     'add-every-5-seconds': {
         'task': 'colleges.tasks.add_student',          # 任务名
-        'schedule': timedelta(seconds=5),   # 每2s执行一次该任务
+        'schedule': timedelta(seconds=5),   # 每5s执行一次该任务
         'args': ()
     }
 }

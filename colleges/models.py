@@ -68,7 +68,7 @@ class AcademyInfo(models.Model):
     name = models.CharField(max_length=20, verbose_name='学院名称')
     ownerCollege = models.ForeignKey(CollegeInfo, on_delete=models.CASCADE, verbose_name='所属学校')
     # 学院编号，不能为空，在表中具有唯一值
-    academyId = models.IntegerField(null=False, unique=True, verbose_name='学院编号')
+    academyId = models.BigIntegerField(null=False, unique=True, verbose_name='学院编号')
     majorNum = models.PositiveIntegerField(verbose_name='专业数量')
     teacherNum = models.PositiveIntegerField(verbose_name='教职工数量')
     studentNum = models.PositiveIntegerField(verbose_name='学生数量')
@@ -96,7 +96,7 @@ class MajorInfo(models.Model):
     name = models.CharField(max_length=20, verbose_name='专业名称')
     ownerAcademy = models.ForeignKey(AcademyInfo, on_delete=models.CASCADE, verbose_name='所属学院')
     # 专业编号，不能为空，在表中具有唯一值
-    majorId = models.IntegerField(null=False, unique=True, verbose_name='专业编号')
+    majorId = models.BigIntegerField(null=False, unique=True, verbose_name='专业编号')
     gradeNum = models.PositiveIntegerField(verbose_name='年级数量')
     classNum = models.PositiveIntegerField(verbose_name='班级数量')
     teacherNum = models.PositiveIntegerField(verbose_name='教职工数量')
@@ -123,7 +123,7 @@ class MajorInfo(models.Model):
 class GradeInfo(models.Model):
     """大学年级模型"""
     # 年级编号，不能为空，在表中具有唯一值
-    gradeId = models.IntegerField(null=False, unique=True, verbose_name='年级编号')
+    gradeId = models.BigIntegerField(null=False, unique=True, verbose_name='年级编号')
     ownerMajor = models.ForeignKey(MajorInfo, on_delete=models.CASCADE, verbose_name='所属专业')
     classNum = models.PositiveIntegerField(verbose_name='班级数量')
     teacherNum = models.PositiveIntegerField(verbose_name='教职工数量')
@@ -147,7 +147,7 @@ class GradeInfo(models.Model):
 
 class ClassInfo(models.Model):
     """大学班级模型"""
-    classId = models.IntegerField(null=False, unique=True, verbose_name='班级编号')
+    classId = models.BigIntegerField(null=False, unique=True, verbose_name='班级编号')
     ownerGrade = models.ForeignKey(GradeInfo, on_delete=models.CASCADE, verbose_name='所属年级')
     studentNum = models.PositiveIntegerField(verbose_name='学生数量')
 
@@ -170,13 +170,13 @@ class ClassInfo(models.Model):
 class StudentInfo(models.Model):
     """大学生模型"""
     # 学号，不能为空，在表中具有唯一值
-    studentId = models.IntegerField(null=False, unique=True, verbose_name='学号')
+    studentId = models.BigIntegerField(null=False, unique=True, verbose_name='学号')
     ownerClass = models.ForeignKey(ClassInfo, on_delete=models.CASCADE, verbose_name='所属班级')
     name = models.CharField(max_length=20, verbose_name='姓名')
     namePinYin = models.CharField(max_length=20, verbose_name='姓名拼音')
     idCardNum = models.CharField(max_length=20, verbose_name='身份证号')
     age = models.IntegerField(verbose_name='年龄')
-    year_in_college = models.DateTimeField(verbose_name='入学年份')
+    year_in_college = models.IntegerField(verbose_name='入学年份')
     height = models.IntegerField(verbose_name='身高')
     weight = models.IntegerField(verbose_name='体重')
     bust = models.IntegerField(verbose_name='腰围')

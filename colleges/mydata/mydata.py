@@ -78,7 +78,6 @@ class MyData:
 
     @staticmethod
     def create_colleges():
-        print('Create colleges ------------')
         for college_name in COLLEGES_INFO.keys():
             college = CollegeInfo()
             college.name = college_name
@@ -95,7 +94,8 @@ class MyData:
             for academy_name, majors in ACADEMY_MAJORS.items():
                 academy = AcademyInfo()
                 academy.name = academy_name
-                academy.academyId = ACADEMY_MAJORS[academy_name]['id']
+                # 学院编号：xxxxx-xxx，学校-学院号
+                academy.academyId = college.collegeId * 1000 + ACADEMY_MAJORS[academy_name]['id']
                 academy.majorNum = len(ACADEMY_MAJORS[academy_name]['majors'])
                 academy.teacherNum = 0
                 academy.studentNum = 0
@@ -104,7 +104,8 @@ class MyData:
                 for major_name, major_info in majors['majors'].items():
                     major = MajorInfo()
                     major.name = major_name
-                    major.majorId = major_info['id']
+                    # 专业编号：xxxxx-xxx-xxx，学校-学院号-专业号
+                    major.majorId = academy.academyId * 1000 + major_info['id']
                     major.gradeNum = 4
                     major.classNum = 4*major.gradeNum
                     major.teacherNum = 0
@@ -113,7 +114,8 @@ class MyData:
                     major.save()
                     for i in range(1, 5):
                         grade = GradeInfo()
-                        grade.gradeId = i
+                        # 年级编号：xxxxx-xxx-xxx-xx，学校-学院号-专业号-年级
+                        grade.gradeId = major.majorId*100 + i
                         grade.classNum = 4
                         grade.teacherNum = 0
                         grade.studentNum = 0
@@ -121,7 +123,8 @@ class MyData:
                         grade.save()
                         for j in range(1, 5):
                             mclass = ClassInfo()
-                            mclass.classId = j
+                            # 班级编号：xxxxx-xxx-xxx-xx-xx，学校-学院号-专业号-年级-班级
+                            mclass.classId = grade.gradeId*100 + j
                             mclass.studentNum = 0
                             mclass.ownerGrade = grade
                             mclass.save()
@@ -139,13 +142,18 @@ class MyData:
         grade_id = random.randint(1, 4)
         major_id = ACADEMY_MAJORS[academy_name]['majors'][major_name]['id']
         academy_id = ACADEMY_MAJORS[academy_name]['id']
-        # college_id = COLLEGES_INFO[college_name]['id']
-
+        college_id = COLLEGES_INFO[college_name]['id']
+        # 班级编号：xxxxx-xxx-xxx-xx-xx，学校-学院号-专业号-年级-班级
+        academy_id = college_id*1000 + academy_id
+        major_id = academy_id*1000 + major_id
+        grade_id = major_id*100 + grade_id
+        class_id = grade_id*100 + class_id
+        print('----------------major_id = %d' % major_id)
         try:
             student.ownerClass = ClassInfo.objects.get(classId=class_id)
             student.ownerClass.ownerGrade = GradeInfo.objects.get(gradeId=grade_id)
-            student.ownerClass.ownerGrade.ownerMajor = MajorInfo.objects.get(name=major_name)
-            student.ownerClass.ownerGrade.ownerMajor.ownerAcademy = AcademyInfo.objects.get(name=academy_name)
+            student.ownerClass.ownerGrade.ownerMajor = MajorInfo.objects.get(majorId=major_id)
+            student.ownerClass.ownerGrade.ownerMajor.ownerAcademy = AcademyInfo.objects.get(academyId=academy_id)
             student.ownerClass.ownerGrade.ownerMajor.ownerAcademy.ownerCollege = \
                 CollegeInfo.objects.get(name=college_name)
         except Exception as e:
@@ -153,10 +161,16 @@ class MyData:
             return
         if student.ownerClass.ownerGrade.ownerMajor.ownerAcademy.ownerCollege.studentNum > 10000:
             return
-        # 学号：xxxx-xxx-xxx-xx-xx-xxx，年份-学院号-专业号-年级-班级-班内编号
-        student.year_in_college = (datetime.datetime.now().year - grade_id + 1)
-        student.studentId = student.year_in_college * 10000000000000 + academy_id * 10000000000 + major_id * 10000000 +\
-            grade_id * 100000 + class_id * 1000 + student.ownerClass.studentNum + 1
+        # 学号：xxxxx-xxx-xxx-xx-xx-xxx，学校-学院号-专业号-年级-班级-班内编号
+        student.age = (18 + grade_id % 100 - 1)
+        student.year_in_college = (datetime.datetime.now().year - grade_id % 100 + 1)
+        student.height = random.randint(150, 200)
+        student.weight = random.randint(40, 100)
+        student.bust = random.randint(60, 100)
+        student.waist = random.randint(60, 100)
+        student.hips = random.randint(60, 100)
+        student.married = False
+        student.studentId = class_id*1000 + student.ownerClass.studentNum + 1
 
         print('Create student: %s[%d]-%s-%s-%s-%d年级%d班' % (student.name, student.studentId, college_name,
                                                            academy_name, major_name, grade_id, class_id))
@@ -173,4 +187,8 @@ class MyData:
         student.ownerClass.ownerGrade.ownerMajor.save()
         student.ownerClass.ownerGrade.ownerMajor.ownerAcademy.save()
         student.ownerClass.ownerGrade.ownerMajor.ownerAcademy.ownerCollege.save()
-
+        # student.ownerClass.ownerGrade.ownerMajor.ownerAcademy.save()
+        # student.ownerClass.ownerGrade.ownerMajor.save()
+        # student.ownerClass.ownerGrade.save()
+        # student.ownerClass.save()
+        # student.save()
